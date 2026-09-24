@@ -4,14 +4,24 @@ A small, locally runnable room reservation demo for the TIU 11 Applications Deve
 
 ## Run locally (Mac / VS Code)
 
-Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) and [Node.js 22 or later](https://nodejs.org/). Open this folder in VS Code, then use two terminals:
+This `monterey-net8` branch is a local demo fallback for an Intel Mac running macOS 12.7.6. The original .NET 10 implementation remains on `main`. Microsoft no longer supports macOS 12 for current .NET releases; this branch uses .NET 8, which was built for Monterey, as a best-effort local workaround. It still needs to be checked on the actual Mac before the interview.
+
+Install the [.NET 8 SDK for macOS x64](https://dotnet.microsoft.com/download/dotnet/8.0) and [Node.js 22 or later](https://nodejs.org/). Because this Mac already has an incompatible Homebrew .NET 10, install .NET 8 into a separate user folder and call it explicitly:
+
+```bash
+curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/room-dotnet-install.sh
+bash /tmp/room-dotnet-install.sh --channel 8.0 --architecture x64 --install-dir "$HOME/.dotnet8"
+"$HOME/.dotnet8/dotnet" --info
+```
+
+If the final command also crashes, stop here and use a Mac with macOS 14 or newer for the .NET 10 `main` branch. Open this folder in VS Code, then use two terminals:
 
 **Terminal 1 — API**
 
 ```bash
 cd server
-dotnet restore
-dotnet run --urls http://127.0.0.1:5080
+"$HOME/.dotnet8/dotnet" restore
+"$HOME/.dotnet8/dotnet" run --urls http://127.0.0.1:5080
 ```
 
 **Terminal 2 — React app**
@@ -63,9 +73,9 @@ From the repo root, with the API running at port 5080:
 python3 scripts/smoke.py
 ```
 
-The smoke script creates a test room and checks pending conflicts, adjacent slots, denial releasing a slot, approved conflicts, and listing. It leaves its test records in the demo database. The frontend build is `cd client && npm run build`.
+The smoke script creates a test room and checks pending conflicts, adjacent slots, denial releasing a slot, approved conflicts, and listing. It leaves its test records in the demo database. To launch and test the API in one step, run `ROOM_DOTNET_CLI="$HOME/.dotnet8/dotnet" bash scripts/verify.sh` from the repo root. The frontend build is `cd client && npm run build`.
 
-**Current validation:** React TypeScript build and .NET 10 backend build passed. The smoke script passed against a running API, including two simultaneous requests for one slot. A local Mac walkthrough and visual browser check are still recommended before the interview.
+**Current validation:** React TypeScript build passed on `main`. The .NET 8 backend build and API smoke script passed in an isolated Linux environment, including concurrent requests. This does not establish compatibility with macOS 12; test the SDK and full walkthrough on the actual Mac before the interview.
 
 ## AI usage log
 
