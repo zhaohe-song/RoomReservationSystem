@@ -6,6 +6,8 @@ A small, locally runnable room reservation demo for the TIU 11 Applications Deve
 
 Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) and [Node.js 22 or later](https://nodejs.org/). Open this folder in VS Code, then use two terminals:
 
+**Mac compatibility:** Microsoft currently supports .NET 10 on macOS 14 or newer. The author's Intel Mac with macOS 12.7.6 aborts during `dotnet restore`. A separate [`monterey-net8` branch](https://github.com/zhaohe-song/RoomReservationSystem/tree/monterey-net8) keeps the same app and uses .NET 8 as a best-effort local demo fallback. It is validated in Linux but still needs testing on the actual Mac; macOS 12 itself is no longer in Microsoft's support list.
+
 **Terminal 1 — API**
 
 ```bash
@@ -76,6 +78,7 @@ The smoke script creates a test room and checks pending conflicts, adjacent slot
 | Initial UI cleared form fields even when the API call failed and could default to a past time late in the day | **Rejected/modified** those behaviors: fields clear only on success, and late-day startup defaults to the next morning. |
 | Conflict logic and timestamps | **Reviewed** half-open interval comparison, pending holds, denial release, and transaction boundary. Added an API smoke walkthrough including two simultaneous requests. **Modified** SQLite-loaded timestamps to serialize with `Z` so browsers display the correct local time. Broader load testing remains future work. |
 | Dependency review | The first EF Core package version pulled in an older SQLite native package with a security advisory. **Modified** the package reference to a newer .NET 10 patch; restore/build then completed without warnings. |
+| Local Mac compatibility | The chosen .NET 10 stack failed during restore on macOS 12.7.6. **Intervened** by preserving this branch and adding a separate .NET 8 demo branch, with the unsupported-OS limitation documented. |
 | Official .NET / Vite documentation | Used to check current minimal API, SQLite provider and React TypeScript tooling conventions. |
 
 I chose a local database rather than a hosted service because the interview demo must work from VS Code and Terminal without account setup or network access.
