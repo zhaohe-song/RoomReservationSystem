@@ -79,7 +79,8 @@ app.MapGet("/api/reservations", async (ReservationDb db, int? userId, bool? upco
     var names = await db.Users.ToDictionaryAsync(u => u.Id, u => u.Name);
     return Results.Ok(rows.Select(r => new ReservationView(r.Id, r.RoomId, r.Room!.Name,
         r.Room.Site!.Name, r.UserId, names.GetValueOrDefault(r.UserId, "Unknown"),
-        r.Title, r.StartUtc, r.EndUtc, r.Status)));
+        r.Title, DateTime.SpecifyKind(r.StartUtc, DateTimeKind.Utc),
+        DateTime.SpecifyKind(r.EndUtc, DateTimeKind.Utc), r.Status)));
 });
 
 app.MapPost("/api/reservations", async (ReservationDb db, CreateReservation input) =>

@@ -62,7 +62,9 @@ expect(request(f"/reservations/{second['id']}/decision", "PATCH", {
     "adminUserId": 3, "status": "Approved",
 })[0], 200)
 expect(reserve(start, end)[0], 409)
-expect(request("/reservations?userId=1&upcoming=true")[0], 200)
+status, listing = request("/reservations?userId=1&upcoming=true")
+expect(status, 200)
+assert listing and listing[0]["startUtc"].endswith("Z"), "Reservation timestamps must be UTC"
 
 parallel_start = start + timedelta(hours=3)
 with ThreadPoolExecutor(max_workers=2) as pool:

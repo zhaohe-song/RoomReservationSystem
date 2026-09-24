@@ -74,7 +74,7 @@ The smoke script creates a test room and checks pending conflicts, adjacent slot
 | ChatGPT / Codex generated the initial ASP.NET Core API, EF models, React UI, CSS, and documentation | Accepted the stack chosen for the exercise; reviewed and modified the generated flow and validation. |
 | Initial backend draft represented demo users only in a fixed array | **Modified** to seed a real `User` table because user modeling is part of the brief. The demo persona menu still has no authentication. |
 | Initial UI cleared form fields even when the API call failed and could default to a past time late in the day | **Rejected/modified** those behaviors: fields clear only on success, and late-day startup defaults to the next morning. |
-| Conflict logic | **Reviewed** half-open interval comparison, pending holds, denial release, and transaction boundary. Added an API smoke walkthrough including two simultaneous requests; broader load testing remains future work. |
+| Conflict logic and timestamps | **Reviewed** half-open interval comparison, pending holds, denial release, and transaction boundary. Added an API smoke walkthrough including two simultaneous requests. **Modified** SQLite-loaded timestamps to serialize with `Z` so browsers display the correct local time. Broader load testing remains future work. |
 | Dependency review | The first EF Core package version pulled in an older SQLite native package with a security advisory. **Modified** the package reference to a newer .NET 10 patch; restore/build then completed without warnings. |
 | Official .NET / Vite documentation | Used to check current minimal API, SQLite provider and React TypeScript tooling conventions. |
 
